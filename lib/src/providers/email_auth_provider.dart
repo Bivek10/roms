@@ -179,9 +179,9 @@ class EmailAuthentication with ChangeNotifier {
     try {
       await firebaseAuth.signOut();
 
-      sharedPreferences.setString("uid", "");
+      sharedPreferences.remove("uid");
 
-      sharedPreferences.setString('email', "");
+      sharedPreferences.remove("email");
       emailAuthenticaitonState(AuthState.init);
     } on FirebaseAuthException catch (e) {
       return false;

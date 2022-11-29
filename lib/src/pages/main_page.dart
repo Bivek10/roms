@@ -15,17 +15,17 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  late String uid;
+  late String? uid;
   @override
   void initState() {
-    uid = sharedPreferences.getString("uid")!;
+    uid = sharedPreferences.getString("uid");
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return uid.isNotEmpty
+    return uid != null
         ? const HomePage()
         : Consumer<EmailAuthentication>(builder: (context, value, child) {
             return value.authenticationState == AuthState.loaded

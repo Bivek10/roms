@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../config/firebase/auth.dart';
 import '../../core/utils/app_secrets.skeleton.dart';
+import '../../core/utils/snack_bar.dart';
 import '../../widgets/atoms/loader.dart';
 import '../../widgets/molecules/header.dart';
 import 'location_picker_function.dart';
@@ -74,15 +75,11 @@ class _OrderTrackingMapState extends State<OrderTrackingMap> {
                 startLocation:
                     LatLng(snapshot.data!.latitude, snapshot.data!.longitude),
                 endLocation: endLocation);
-            firebaseFirestore
-                .collection(AppSecrets.consumerorder)
-                .doc(widget.consumerdocid)
-                .set({
-              "delivery_boy": {
-                "lat": snapshot.data!.latitude,
-                "logn": snapshot.data!.latitude
-              }
-            });
+            updateorderStatus(
+              startLatLong:
+                  LatLng(snapshot.data!.latitude, snapshot.data!.longitude),
+              endLatLong: endLocation,
+            );
             return GoogleMap(
                 myLocationEnabled: true,
                 myLocationButtonEnabled: false,
@@ -174,5 +171,36 @@ class _OrderTrackingMapState extends State<OrderTrackingMap> {
     Polyline polyline = Polyline(
         polylineId: id, color: Colors.red, points: polylineCoordinates);
     polylines[id] = polyline;
+  }
+
+  void updateorderStatus(
+      {required LatLng startLatLong, required LatLng endLatLong}) {
+    var response = Geolocator.distanceBetween(startLatLong.latitude,
+        startLatLong.longitude, endLatLong.latitude, endLatLong.longitude);
+    if (response < 0.1) {
+      firebaseFirestore
+          .collection(AppSecrets.consumerorder)
+          .doc(widget.consumerdocid)
+          .update({
+        "rider_location": {
+          "lat": startLatLong.latitude,
+          "long": startLatLong.longitude,
+        },
+        "orderStatus": "completed"
+      }).then((value) {
+        showSuccess(message: "Order complated");
+      });
+    } else {
+      firebaseFirestore
+          .collection(AppSecrets.consumerorder)
+          .doc(widget.consumerdocid)
+          .update({
+        "rider_location": {
+          "lat": startLatLong.latitude,
+          "long": startLatLong.longitude,
+        },
+        "orderStatus": "processing"
+      });
+    }
   }
 }

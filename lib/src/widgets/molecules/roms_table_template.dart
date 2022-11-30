@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_skeleton/src/config/routes/routesname.dart';
+import 'package:flutter_skeleton/src/widgets/atoms/dialoug.dart';
 
 import 'package:sizer/sizer.dart';
 
@@ -88,7 +89,7 @@ class _TableStructureState extends State<TableStructure> {
                           iconname: Icons.check,
                           showIcon: false,
                           onClick: () {
-                            widget.onviewRunningOrderClick();
+                            // widget.onviewRunningOrderClick();
                           })
                       : MenuButton(
                           color: Colors.green,
@@ -99,8 +100,7 @@ class _TableStructureState extends State<TableStructure> {
                             widget.onstartOderClick();
                           }),
                   UserCached.userrole == "Admin" && !widget.isTableEngaged
-                      ?
-                       PopupMenuButton(
+                      ? PopupMenuButton(
                           child: const Icon(
                             Icons.more_vert,
                             color: Colors.red,
@@ -139,8 +139,68 @@ class _TableStructureState extends State<TableStructure> {
                             }
                           },
                         )
-                      
-                      : const SizedBox()
+                      : PopupMenuButton(
+                          child: const Icon(
+                            Icons.more_vert,
+                            color: Colors.red,
+                          ),
+                          itemBuilder: (context) => [
+                            const PopupMenuItem(
+                              value: 0,
+                              child: ListTile(
+                                leading: Icon(Icons.cancel),
+                                title: Text("Cancle Order"),
+                              ),
+                            ),
+                            const PopupMenuItem(
+                              value: 1,
+                              child: ListTile(
+                                leading: Icon(Icons.done),
+                                title: Text("Complete Order"),
+                              ),
+                            ),
+                          ],
+                          onSelected: (value) {
+                            if (value == 1) {
+                              Map<String, dynamic> reupdateTable = {
+                                "tableid": widget.tableID,
+                                "isRunning": false,
+                                "totalbill": "0",
+                                "capacity": widget.tableCapacity
+                              };
+
+                              manageTableApi.onChangeOrderStatus(
+                                tableuid: widget.tableuid,
+                                tabledata: reupdateTable,
+                                isCancel: false,
+                                context: context,
+                              );
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return ConfirmDialog(
+                                      onYes: () {
+                                        Navigator.pop(context);
+                                        Map<String, dynamic> reupdateTable = {
+                                          "tableid": widget.tableID,
+                                          "isRunning": false,
+                                          "totalbill": "0",
+                                          "capacity": widget.tableCapacity,
+                                        };
+                                        manageTableApi.onChangeOrderStatus(
+                                          isCancel: true,
+                                          tableuid: widget.tableuid,
+                                          tabledata: reupdateTable,
+                                          context: context,
+                                        );
+                                      },
+                                      content: "Are you sure to cancle order ?",
+                                    );
+                                  });
+                            }
+                          },
+                        )
                 ],
               ),
             ],

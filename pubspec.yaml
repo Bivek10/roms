@@ -30,7 +30,11 @@ dependencies:
   permission_handler: ^10.2.0
   image_picker: ^0.8.6
   firebase_storage: ^11.0.6
-
+  google_maps_flutter: ^2.1.12
+  geolocator: ^9.0.1
+  geocoding: ^2.0.4
+  flutter_polyline_points: ^1.0.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

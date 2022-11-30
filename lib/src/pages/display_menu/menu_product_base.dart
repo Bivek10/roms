@@ -27,44 +27,19 @@ class ProductListTile extends StatelessWidget {
         children: [
           Container(
             height: 120,
-            width: 100,
+            width: 120,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.white,
             ),
-            child: Stack(
-              clipBehavior: Clip.antiAlias,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: FadeInImage.assetNetwork(
-                    placeholder: 'assets/images/logo.png',
-                    image: menuitem["imageurl"] ??
-                        "https://cdn-icons-png.flaticon.com/512/242/242452.png",
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                menuitem["discount"] == "0"
-                    ? Container()
-                    : Positioned(
-                        top: 0,
-                        child: Container(
-                          width: 60,
-                          decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10),
-                              ),
-                              color: Colors.redAccent),
-                          child: Center(
-                            child: Text(
-                              "Rs." "${menuitem["price"]}",
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      )
-              ],
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: FadeInImage.assetNetwork(
+                placeholder: 'assets/images/logo.png',
+                image: menuitem["imageurl"] ??
+                    "https://cdn-icons-png.flaticon.com/512/242/242452.png",
+                fit: BoxFit.fill,
+              ),
             ),
           ),
           Expanded(
@@ -228,6 +203,5 @@ class ProductListTile extends StatelessWidget {
     TableOrderApi tableOrderApi = TableOrderApi();
     //tableOrderApi.getcartByTableid(tableid: tableid);
     tableOrderApi.addToCart(data: data, productname: menuitem["foodname"]);
-
   }
 }

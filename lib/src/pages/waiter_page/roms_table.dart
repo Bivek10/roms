@@ -38,24 +38,19 @@ class _TableViewsState extends State<TableViews> {
                     arguments: TableModel(
                       widget.tabledata[index]["uid"],
                       "${widget.tabledata[index]["tableid"]}",
-                      widget.tabledata[index]["totalbill"],
+                      widget.tabledata[index]["totalbill"].toString(),
                       widget.tabledata[index]["capacity"],
                       widget.tabledata[index]["isRunning"],
                     ),
                   );
                 },
                 onviewRunningOrderClick: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: ((builder) => OnRunningOperation(
-                          tabledata: widget.tabledata[index],
-                        )),
-                  );
+                 
                 },
                 tableuid: widget.tabledata[index]["uid"],
                 tableID: "${widget.tabledata[index]["tableid"]}",
                 tableName: index.toString(),
-                totalBill: widget.tabledata[index]["totalbill"],
+                totalBill: widget.tabledata[index]["totalbill"].toString(),
                 tableCapacity: widget.tabledata[index]["capacity"],
                 isTableEngaged: widget.tabledata[index]["isRunning"],
               ),

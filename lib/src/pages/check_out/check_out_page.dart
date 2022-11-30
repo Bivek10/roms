@@ -127,15 +127,25 @@ class _CheckOutPageState extends State<CheckOutPage> {
                   trailingIcon: const Icon(Icons.chevron_right),
                   onPressed: () {
                     num totalbill = 0;
+                    DateTime currentTime = DateTime.now();
                     for (var ele in filterdata) {
                       totalbill += int.parse(ele["subtotal"].toString());
                     }
-
-                    ManageTableApi manageTableApi = ManageTableApi();
-                    manageTableApi.updateTableStatus(
-                        totalbill: totalbill.toString(),
-                        tableUid: widget.tableid,
-                        context: context);
+                    Map<String, dynamic> data = {
+                      "tableid": widget.tableid,
+                      "orderData": filterdata,
+                      "totalamount": totalbill,
+                      "orderStatus": "pending",
+                      "datetime": currentTime.toString(),
+                    };
+                    tableOrderApi.updateOrderStatus(
+                        data: data, context: context);
+                        
+                    // ManageTableApi manageTableApi = ManageTableApi();
+                    // manageTableApi.updateTableStatus(
+                    //     totalbill: totalbill.toString(),
+                    //     tableUid: widget.tableid,
+                    //     context: context);
                   },
 
                   child: const Text(

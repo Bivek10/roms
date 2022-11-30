@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_skeleton/src/config/firebase/auth.dart';
-
 import '../../core/utils/app_mixin.dart';
 import '../../core/utils/app_secrets.skeleton.dart';
 import '../../core/utils/snack_bar.dart';
@@ -111,13 +110,13 @@ class ManageTableApi with ConnectivityMixin {
       required BuildContext context}) async {
     List<String> ordertableIDList = [];
     await firebaseFirestore
-        .collection(AppSecrets.tableorder)
+        .collection(AppSecrets.tablecart)
         .get()
         .then((value) async {
       for (var e in value.docs) {
         if (e["tableuid"] == tableuid) {
           await firebaseFirestore
-              .collection(AppSecrets.tableorder)
+              .collection(AppSecrets.tablecart)
               .doc(e.id)
               .update(
             {"isorder": false},
@@ -144,31 +143,31 @@ class ManageTableApi with ConnectivityMixin {
     });
   }
 
-  onCancleOrder(
+  onChangeOrderStatus(
       {required tableuid,
+      required isCancel,
       required Map<String, dynamic> tabledata,
       required BuildContext context}) async {
-    await firebaseFirestore
+    firebaseFirestore
         .collection(AppSecrets.tableorder)
+        .where("tableid", isEqualTo: tableuid)
+        .where("orderStatus", isEqualTo: "pending")
         .get()
         .then((value) async {
       for (var e in value.docs) {
-        if (e["tableuid"] == tableuid) {
-          await firebaseFirestore
-              .collection(AppSecrets.tableorder)
-              .doc(e.id)
-              .update(
-            {"isorder": false},
-          );
+        if (isCancel) {
+          e.reference.update({"orderStatus": "cancle"});
+        } else {
+          e.reference.update({"orderStatus": "complete"});
         }
       }
-      await firebaseFirestore
+
+      firebaseFirestore
           .collection(AppSecrets.tablecollection)
           .doc(tableuid)
           .set(tabledata)
-          .then((value) async {
-        showSuccess(message: "Order cancled");
-      });
+          .then((value) async {});
+      showSuccess(message: "Order cancled");
     });
   }
 }

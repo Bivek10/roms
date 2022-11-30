@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
         onPressedLeading: () {
           _scaffoldKey.currentState!.openDrawer();
         },
-        showAction: true,
+        showAction: false,
         showMenu: true,
       ),
       drawer: Drawer(
@@ -66,12 +66,10 @@ class _HomePageState extends State<HomePage> {
               ); // print(data.length);
 
             }
-            return const Center(child:  Loader());
-          
+            return const Center(child: Loader());
           }),
       bottomNavigationBar: UserCached.userrole == "Admin"
-          ? 
-          Padding(
+          ? Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -96,11 +94,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-               
                 ],
               ),
             )
-          
           : const SizedBox(),
     );
   }

@@ -3,13 +3,19 @@
      <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GALLERY"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    
     <application
-        android:label="flutter_skeleton"
+        android:label="flutter_admin"
         android:name="${applicationName}"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
+           <!-- Add your api key here -->
+                <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyC5Ku3swhPv2eKnkYyh-MoneJf_hLioC9g"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

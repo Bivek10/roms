@@ -8,17 +8,17 @@ class OrderApi {
     return firebaseFirestore.collection(AppSecrets.consumerorder).snapshots();
   }
 
-  Future<List<Map<String, dynamic>>> getOrderByUser(
-      {required String userid}) async {
+  Future<List<Map<String, dynamic>>> getOrderByUser() async {
     List<Map<String, dynamic>> tempList = [];
     var response =
         await firebaseFirestore.collection(AppSecrets.consumerorder).get();
     for (var ele in response.docs) {
-      if (userid == ele.data()["userid"]) {
-        tempList.add(ele.data());
-      }
+      Map<String, dynamic> tempmap = ele.data();
+      tempmap.addAll({"uid": ele.id});
+
+      tempList.add(tempmap);
     }
+    //print(tempList);
     return tempList;
   }
-  
 }

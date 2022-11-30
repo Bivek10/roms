@@ -5,6 +5,7 @@ import '../../pages/display_menu/food_view.dart';
 import '../../pages/login/register/registration.dart';
 import '../../pages/manage_staff/staff_setting.dart';
 import '../../pages/manage_table/add_table.dart';
+import '../../pages/view_order/view_order_page.dart';
 import '../../pages/waiter_page/home_page.dart';
 import '../../pages/login/register/login_page.dart';
 import '../../pages/main_page.dart';
@@ -24,4 +25,5 @@ class RouteName {
   static const categoryHome = CategoryHome.pageUrl;
   static const foodform = AddFoodMenu.pageUrl;
   static const foodmenu = FoodMenu.pageUrl;
+  static const orderpage = ViewOrder.pageUrl;
 }

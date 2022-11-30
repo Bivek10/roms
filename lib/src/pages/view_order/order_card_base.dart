@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_skeleton/src/pages/view_order/order_tracking.dart';
 
+import '../../config/permission_checker/permission_handler.dart';
 import '../../core/utils/snack_bar.dart';
+import 'location_picker_function.dart';
 
 class OrderBaseCard extends StatelessWidget {
   final Map<String, dynamic> orderdata;
 
-  const OrderBaseCard({Key? key, required this.orderdata}) : super(key: key);
-
+  OrderBaseCard({Key? key, required this.orderdata}) : super(key: key);
+  PermissionHandlerPermissionService locatonper =
+      PermissionHandlerPermissionService();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -41,19 +44,21 @@ class OrderBaseCard extends StatelessWidget {
                     ),
                   ),
                   InkWell(
-                    onTap: () {
-                      if (orderdata["orderstatus"] == "ending") {
-                        showError(
-                            message:
-                                "Order is not processed. Please be patience");
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                const OrderTrackingMap(loc: {}),
-                          ),
-                        );
+                    onTap: () async {
+                      UserLocationPicker userLocationPicker =
+                          UserLocationPicker();
+                      if (await userLocationPicker.getCurrentLocation() &&
+                          await userLocationPicker.checkLocationPermission(
+                              context: context)) {
+                        if (orderdata["orderstatus"] == "pending") {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => OrderTrackingMap(
+                                  loc: orderdata["endlocation"], consumerdocid: orderdata["uid"],),
+                            ),
+                          );
+                        }
                       }
                     },
                     child: Container(

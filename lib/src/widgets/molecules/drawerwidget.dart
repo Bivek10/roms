@@ -6,6 +6,7 @@ import 'package:sizer/sizer.dart';
 import '../../config/api/user_info_api.dart';
 import '../../config/routes/routesname.dart';
 import '../../config/themes/colors.dart';
+import '../../pages/view_order/view_order_page.dart';
 import '../../providers/email_auth_provider.dart';
 import 'drawer_list.dart';
 
@@ -104,6 +105,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 }
                 if (index == 1) {
                   Navigator.pushNamed(context, RouteName.managestaff);
+                }
+                if (index == 2) {
+                  Navigator.pushNamed(context, RouteName.orderpage);
                 }
                 if (index == 3) {
                   bool isLogout = await Provider.of<EmailAuthentication>(

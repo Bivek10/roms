@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_skeleton/src/config/api/get_orders_api.dart';
 
 import '../../injector.dart';
@@ -37,7 +35,7 @@ class _ViewOrderState extends State<ViewOrder> {
         onPressedAction: () {},
       ),
       body: FutureBuilder<List>(
-        future: orderApi.getOrderByUser(userid: userid),
+        future: orderApi.getOrderByUser(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.isEmpty) {
@@ -58,11 +56,12 @@ class _ViewOrderState extends State<ViewOrder> {
                 itemBuilder: (context, index) {
                   var d = snapshot.data![index];
                   Map<String, dynamic> data = {
+                    "uid":d["uid"],
                     "datetime": d["datetime"],
                     "totalamount": d["totalamount"],
                     "orderstatus": d["orderStatus"],
                     "items": d["orderData"].length.toString(),
-                    "location": d["delivery_location"]
+                    "endlocation": d["delivery_location"]
                   };
                   return OrderBaseCard(orderdata: data);
                 });

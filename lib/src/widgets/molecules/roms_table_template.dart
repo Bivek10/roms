@@ -45,8 +45,6 @@ class _TableStructureState extends State<TableStructure> {
 
   @override
   Widget build(BuildContext context) {
-    // print(widget.tableID);
-
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.sp),
@@ -99,108 +97,109 @@ class _TableStructureState extends State<TableStructure> {
                           onClick: () {
                             widget.onstartOderClick();
                           }),
-                  UserCached.userrole == "Admin" && !widget.isTableEngaged
-                      ? PopupMenuButton(
-                          child: const Icon(
-                            Icons.more_vert,
-                            color: Colors.red,
+                  if (UserCached.userrole == "Admin" && !widget.isTableEngaged)
+                    PopupMenuButton(
+                      child: const Icon(
+                        Icons.more_vert,
+                        color: Colors.red,
+                      ),
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: 0,
+                          child: ListTile(
+                            leading: Icon(Icons.edit),
+                            title: Text("Edit"),
                           ),
-                          itemBuilder: (context) => [
-                            const PopupMenuItem(
-                              value: 0,
-                              child: ListTile(
-                                leading: Icon(Icons.edit),
-                                title: Text("Edit"),
-                              ),
-                            ),
-                            const PopupMenuItem(
-                              value: 1,
-                              child: ListTile(
-                                leading: Icon(Icons.delete),
-                                title: Text("Delete"),
-                              ),
-                            ),
-                          ],
-                          onSelected: (value) {
-                            if (value == 0) {
-                              Navigator.pushNamed(
-                                context,
-                                RouteName.addtable,
-                                arguments: EditFormValue(
-                                    true,
-                                    {
-                                      "table_id": widget.tableID,
-                                      "capacity": widget.tableCapacity
-                                    },
-                                    widget.tableuid),
-                              );
-                            } else {
-                              manageTableApi.deleteTable(widget.tableuid);
-                            }
-                          },
-                        )
-                      : PopupMenuButton(
-                          child: const Icon(
-                            Icons.more_vert,
-                            color: Colors.red,
+                        ),
+                        const PopupMenuItem(
+                          value: 1,
+                          child: ListTile(
+                            leading: Icon(Icons.delete),
+                            title: Text("Delete"),
                           ),
-                          itemBuilder: (context) => [
-                            const PopupMenuItem(
-                              value: 0,
-                              child: ListTile(
-                                leading: Icon(Icons.cancel),
-                                title: Text("Cancle Order"),
-                              ),
-                            ),
-                            const PopupMenuItem(
-                              value: 1,
-                              child: ListTile(
-                                leading: Icon(Icons.done),
-                                title: Text("Complete Order"),
-                              ),
-                            ),
-                          ],
-                          onSelected: (value) {
-                            if (value == 1) {
-                              Map<String, dynamic> reupdateTable = {
-                                "tableid": widget.tableID,
-                                "isRunning": false,
-                                "totalbill": "0",
-                                "capacity": widget.tableCapacity
-                              };
+                        ),
+                      ],
+                      onSelected: (value) {
+                        if (value == 0) {
+                          Navigator.pushNamed(
+                            context,
+                            RouteName.addtable,
+                            arguments: EditFormValue(
+                                true,
+                                {
+                                  "table_id": widget.tableID,
+                                  "capacity": widget.tableCapacity
+                                },
+                                widget.tableuid),
+                          );
+                        } else {
+                          manageTableApi.deleteTable(widget.tableuid);
+                        }
+                      },
+                    ),
+                  if (widget.isTableEngaged)
+                    PopupMenuButton(
+                      child: const Icon(
+                        Icons.more_vert,
+                        color: Colors.red,
+                      ),
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: 0,
+                          child: ListTile(
+                            leading: Icon(Icons.cancel),
+                            title: Text("Cancle Order"),
+                          ),
+                        ),
+                        const PopupMenuItem(
+                          value: 1,
+                          child: ListTile(
+                            leading: Icon(Icons.done),
+                            title: Text("Complete Order"),
+                          ),
+                        ),
+                      ],
+                      onSelected: (value) {
+                        if (value == 1) {
+                          Map<String, dynamic> reupdateTable = {
+                            "tableid": widget.tableID,
+                            "isRunning": false,
+                            "totalbill": "0",
+                            "capacity": widget.tableCapacity
+                          };
 
-                              manageTableApi.onChangeOrderStatus(
-                                tableuid: widget.tableuid,
-                                tabledata: reupdateTable,
-                                isCancel: false,
-                                context: context,
-                              );
-                            } else {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return ConfirmDialog(
-                                      onYes: () {
-                                        Navigator.pop(context);
-                                        Map<String, dynamic> reupdateTable = {
-                                          "tableid": widget.tableID,
-                                          "isRunning": false,
-                                          "totalbill": "0",
-                                          "capacity": widget.tableCapacity,
-                                        };
-                                        manageTableApi.onChangeOrderStatus(
-                                          isCancel: true,
-                                          tableuid: widget.tableuid,
-                                          tabledata: reupdateTable,
-                                          context: context,
-                                        );
-                                      },
-                                      content: "Are you sure to cancle order ?",
+                          manageTableApi.onChangeOrderStatus(
+                            tableuid: widget.tableuid,
+                            tabledata: reupdateTable,
+                            isCancel: false,
+                            context: context,
+                          );
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return ConfirmDialog(
+                                  onYes: () {
+                                    Navigator.pop(context);
+                                    Map<String, dynamic> reupdateTable = {
+                                      "tableid": widget.tableID,
+                                      "isRunning": false,
+                                      "totalbill": "0",
+                                      "capacity": widget.tableCapacity,
+                                    };
+                                    manageTableApi.onChangeOrderStatus(
+                                      isCancel: true,
+                                      tableuid: widget.tableuid,
+                                      tabledata: reupdateTable,
+                                      context: context,
                                     );
-                                  });
-                            }
-                          },
-                        )
+                                  },
+                                  content: "Are you sure to cancle order ?",
+                                );
+                              });
+                        }
+                      },
+                    )
                 ],
               ),
             ],

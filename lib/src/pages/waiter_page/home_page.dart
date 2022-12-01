@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: Header(
-        title: "Himalayan Resturents",
+        title: "Himalayan Restaurent",
         onPressedAction: () {},
         onPressedLeading: () {
           _scaffoldKey.currentState!.openDrawer();

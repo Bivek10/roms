@@ -34,8 +34,10 @@ class _AddTableState extends State<AddTable> {
 
   @override
   void initState() {
-    tableid = widget.editFormValue.initialvalue["tableid"];
-    tablecapacity = widget.editFormValue.initialvalue["capacity"];
+    if (widget.editFormValue.isEdit) {
+      tableid = widget.editFormValue.initialvalue["table_id"];
+      tablecapacity = widget.editFormValue.initialvalue["capacity"];
+    }
     super.initState();
   }
 
@@ -146,7 +148,6 @@ class _AddTableState extends State<AddTable> {
         ),
       ),
     );
-  
   }
 
   validdateLoginForm() async {
@@ -158,6 +159,7 @@ class _AddTableState extends State<AddTable> {
         "isRunning": false,
         "totalbill": "0"
       };
+      print(tableData);
       ManageTableApi manageTableApi = ManageTableApi();
       if (widget.editFormValue.isEdit) {
         manageTableApi.editTable(
@@ -175,7 +177,6 @@ class _AddTableState extends State<AddTable> {
       }
     }
   }
-
 }
 
 class EditFormValue {

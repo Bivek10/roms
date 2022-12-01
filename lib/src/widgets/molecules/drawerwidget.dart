@@ -6,6 +6,7 @@ import 'package:sizer/sizer.dart';
 import '../../config/api/user_info_api.dart';
 import '../../config/routes/routesname.dart';
 import '../../config/themes/colors.dart';
+import '../../pages/table_order_view/table_orders.dart';
 import '../../pages/view_order/view_order_page.dart';
 import '../../providers/email_auth_provider.dart';
 import 'drawer_list.dart';
@@ -24,12 +25,15 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   List<String> pages = [
     "Manage Menu",
     "Manage Staff",
-    "View Orders",
-    "Log Out"
   ];
   List<IconData> icons = [
     Icons.category,
     Icons.person,
+  ];
+
+  List<String> pages1 = ["View Orders", "View Table Orders", "Log Out"];
+  List<IconData> icons1 = [
+    Icons.delivery_dining,
     Icons.delivery_dining,
     Icons.logout,
   ];
@@ -106,23 +110,37 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 if (index == 1) {
                   Navigator.pushNamed(context, RouteName.managestaff);
                 }
-                if (index == 2) {
-                  Navigator.pushNamed(context, RouteName.orderpage);
-                }
-                if (index == 3) {
-                  bool isLogout = await Provider.of<EmailAuthentication>(
-                          context,
-                          listen: false)
-                      .signOut();
-                  if (isLogout) {
-                    // ignore: use_build_context_synchronously
-                    Navigator.pushNamedAndRemoveUntil(context,
-                        RouteName.mainPage, (Route<dynamic> route) => false);
-                  }
-                }
               },
             ),
           ),
+        ...List.generate(
+          pages1.length,
+          (index) => DrawerList(
+            iconData: icons1[index],
+            text: pages1[index],
+            tap: () async {
+              if (index == 0) {
+                Navigator.pushNamed(context, RouteName.orderpage);
+              }
+              if (index == 1) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => const TableOrderPage())));
+              }
+              if (index == 2) {
+                bool isLogout = await Provider.of<EmailAuthentication>(context,
+                        listen: false)
+                    .signOut();
+                if (isLogout) {
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushNamedAndRemoveUntil(context, RouteName.mainPage,
+                      (Route<dynamic> route) => false);
+                }
+              }
+            },
+          ),
+        ),
       ],
     );
   }

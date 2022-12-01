@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_skeleton/src/config/api/get_orders_api.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_skeleton/src/widgets/atoms/loader.dart';
 
-import '../../injector.dart';
-import '../../widgets/atoms/loader.dart';
+import '../../config/api/get_orders_api.dart';
 import '../../widgets/molecules/header.dart';
-import 'order_card_base.dart';
+import '../view_order/order_card_base.dart';
 
-class ViewOrder extends StatefulWidget {
-  static const String pageUrl = "/orderpage";
-  const ViewOrder({Key? key}) : super(key: key);
+class TableOrderPage extends StatefulWidget {
+  const TableOrderPage({Key? key}) : super(key: key);
 
   @override
-  State<ViewOrder> createState() => _ViewOrderState();
+  State<TableOrderPage> createState() => _TableOrderPageState();
 }
 
-class _ViewOrderState extends State<ViewOrder> {
+class _TableOrderPageState extends State<TableOrderPage> {
   OrderApi orderApi = OrderApi();
-  late String userid;
+
   @override
   void initState() {
-    userid = sharedPreferences.getString("uid")!;
     super.initState();
   }
 
@@ -28,15 +27,14 @@ class _ViewOrderState extends State<ViewOrder> {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: Header(
-        title: "Order History",
+        title: "Table Order History",
         showMenu: false,
         showAction: false,
         onPressedLeading: () {},
         onPressedAction: () {},
       ),
-     
       body: FutureBuilder<List>(
-        future: orderApi.getOrderByUser(),
+        future: orderApi.getTableOrders(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.isEmpty) {
@@ -56,15 +54,16 @@ class _ViewOrderState extends State<ViewOrder> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   var d = snapshot.data![index];
-                  Map<String, dynamic> data = {
-                    "uid":d["uid"],
-                    "datetime": d["datetime"],
-                    "totalamount": d["totalamount"],
-                    "orderstatus": d["orderStatus"],
-                    "items": d["orderData"].length.toString(),
-                    "endlocation": d["delivery_location"]
-                  };
-                  return OrderBaseCard(orderdata: data);
+                  return ListTile(
+                    title: Text("Table id: ${d["tableid"]}"),
+                    subtitle: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: d["orderData"].length,
+                      itemBuilder: (contex, indexs) {
+                        return Text(d["orderData"][indexs]["foodname"]);
+                      },
+                    ),
+                  );
                 });
           }
           return const Center(
@@ -72,7 +71,6 @@ class _ViewOrderState extends State<ViewOrder> {
           );
         },
       ),
-   
     );
   }
 }

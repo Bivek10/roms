@@ -8,7 +8,7 @@ class AppSecrets {
   static const consumerorder = "consumerorder";
   static const consumerinfo = "consumerinfo";
   static const consumercart = "consumercart";
-  static const String mapkey = 'AIzaSyC5Ku3swhPv2eKnkYyh-MoneJf_hLioC9g';
+  static const String mapkey = 'AIzaSyC5Ku3swhPv2eKnkYyh-MoneJf_hLioC';
   static const String maptypes = 'geocode';
   static const apikey = "0ca50a2ce44647fa9fe43b4612bd0acf";
   static const Map<String, dynamic> headers = {
